@@ -1,0 +1,26 @@
+select * from restaurant inner join
+(select name,count(*) as total from restaurant group by 1 having total > 13) d on d.name = restaurant.name
+inner join city_food_type on city_food_type.id = restaurant.city_food_type_id;
+
+; Report
+
+select 
+
+restaurant.name,
+city.name,
+restaurant.reviews,
+restaurant.url,
+restaurant.address,
+restaurant.postal_code,
+group_concat(food_type.name) as food_types,
+restaurant.extra,
+source.name as source_name
+
+
+from restaurant
+inner join city on restaurant.city_id = city.id
+inner join food_type_restaurant on food_type_restaurant.restaurant_id = restaurant.id 
+inner join food_type on food_type_restaurant.food_type_id = food_type.id
+inner join source on source.id = restaurant.source_id
+
+group by restaurant.name, source_name;
